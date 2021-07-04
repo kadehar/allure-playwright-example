@@ -1,10 +1,10 @@
 package com.github.kadehar.tests;
 
+import com.github.kadehar.utils.ContextProvider;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.options.ViewportSize;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -20,10 +20,13 @@ public class BaseTest {
                 .chromium()
                 .launch(new BrowserType.LaunchOptions().setHeadless(false));
         context = browser.newContext();
+        ContextProvider.setupPage(context);
     }
 
     @AfterAll
     static void afterAll() {
+        ContextProvider.cleanUp();
+        context.close();
         browser.close();
         playwright.close();
     }
